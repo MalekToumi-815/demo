@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerIntegrationTest {
 
     @Container
+    @ServiceConnection
     private static final PostgreSQLContainer<?> postgres =
             new PostgreSQLContainer<>("postgres:16-alpine");
 
@@ -34,13 +36,6 @@ class UserControllerIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @DynamicPropertySource
-    static void configurePostgres(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
 
     @BeforeEach
     void clearUsers() {
