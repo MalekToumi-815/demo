@@ -1,5 +1,6 @@
 package com.example.demo.domain.Service;
 
+import com.example.demo.domain.exception.ResourceNotFoundException;
 import com.example.demo.domain.model.User;
 import com.example.demo.domain.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 
     // CREATE: Save a new user
